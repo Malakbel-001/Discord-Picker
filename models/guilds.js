@@ -15,5 +15,16 @@ exports.create = (guild) => {
         // Ensure that the "id" row is always unique and indexed.
     }
 
-    console.log("todo guild insert");
+    const insert = sql.prepare(`INSERT OR REPLACE INTO guilds (id, serverName, region, ownerName, ownerId) 
+                VALUES (@id, @serverName, @region, @ownerName, @ownerId)`);
+    
+    const newGuild = {
+        id: `${guild.id}`,
+        serverName: `${guild.name}`,
+        region: `${guild.region}`,
+        ownerName: `${guild.owner.displayName}`,
+        ownerId: `${guild.ownerID}`,
+    }
+
+    insert.run(newGuild);
 }
