@@ -1,3 +1,4 @@
 .env
 now.json
 node_modules
+guilds.sqlite
