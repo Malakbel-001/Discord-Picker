@@ -1,4 +1,8 @@
+const guilds = require('../models/guilds')
+
 module.exports = client => {
     console.log(`Logged in as ${client.user.tag}!`)
-    console.log("todo check missing guilds") //TODO: 
+
+    guilds.checkDbExists();
+    guilds.checkMissingGuilds(client);
 }
