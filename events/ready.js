@@ -1,8 +1,9 @@
-const guilds = require('../models/guilds')
+const GuildSqliteStatements = require('../sqlite/guildSql')
 
 module.exports = client => {
     console.log(`Logged in as ${client.user.tag}!`)
 
-    guilds.checkDbExists();
-    guilds.checkMissingGuilds(client);
+    const sql = new GuildSqliteStatements();
+    sql.checkDbExists();
+    sql.checkMissingGuilds(client);
 }
