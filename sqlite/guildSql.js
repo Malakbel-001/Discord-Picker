@@ -1,7 +1,10 @@
 const SQLite = require("better-sqlite3");
 const sql = new SQLite('./guilds.sqlite', { verbose: console.log });
 
-class GuildSqliteStatements {
+/**
+ * Various SQLite functions to control the guilds.sqlite database file
+ */
+class GuildSql {
     insertGuild(guild) {
         const insert = sql.prepare(`INSERT OR REPLACE INTO guilds (id, serverName, region, ownerName, ownerId) 
                 VALUES (@id, @serverName, @region, @ownerName, @ownerId)`);
@@ -56,4 +59,4 @@ class GuildSqliteStatements {
     }
 }
 
-module.exports = GuildSqliteStatements;
+module.exports = GuildSql;
