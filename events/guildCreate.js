@@ -1,5 +1,6 @@
-const guilds = require('../sqlite/guildSql')
+const GuildSqliteStatements = require('../sqlite/guildSql')
 
 module.exports = (client, guild) => {
-    guilds.insertGuild(guild);
+    const sql = new GuildSqliteStatements();
+    sql.insertGuild(guild);
 }
