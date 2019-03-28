@@ -2,9 +2,10 @@ const SQLite = require("better-sqlite3");
 const sql = new SQLite('./guilds.sqlite', { verbose: console.log });
 
 /**
- * Various SQLite functions to control the guilds.sqlite database file
+ * Various (better-)SQLite functions to control the guilds.sqlite database file
  */
 class GuildSql {
+    // INSERT GUILD
     insertGuild(guild) {
         const insert = sql.prepare(`INSERT OR REPLACE INTO guilds (discordId, serverName, region, ownerName, ownerId) 
                 VALUES (@discordId, @serverName, @region, @ownerName, @ownerId)`);
@@ -20,12 +21,14 @@ class GuildSql {
         insert.run(newGuild);
     }
 
+    // DELETE GUILD
     deleteGuild(guild) {
         const deleteGuild = sql.prepare(`DELETE FROM guilds WHERE discordId = ?`);
 
         deleteGuild.run(guild.discordId);
     }
 
+    // Check if the database/table exists. If not create guilds TABLE
     checkDbExists() {
         // Check if the sqlite table "guilds" exists.
         // If the table isn't there, create it and setup the database correctly.
@@ -41,7 +44,8 @@ class GuildSql {
         // Ensure that the "id" row is always unique and indexed.
     }
 
-    checkMissingGuilds(client) {
+    // Check-update the database on guilds added/kicked during downtime
+    checkMissingGuilds(client) { 
         // getGuild sql statement
         const getGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
 
