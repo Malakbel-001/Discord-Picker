@@ -3,8 +3,10 @@ require('dotenv').config()
 const Discord = require('discord.js')
 const fs = require('fs')
 const Enmap = require("enmap");
+const guildSql = require('./sqlite/guildSql')
 
 const client = new Discord.Client()
+client.sql = new guildSql() // Singleton of GuildSql inside the Client object
 
 fs.readdir('./events/', (err, files) => { // eventHandler
     files.forEach(file => {
@@ -25,5 +27,6 @@ fs.readdir("./commands/", (err, files) => {
     client.commands.set(commandName, props);
   });
 });
+
 
 client.login(process.env.BOT_TOKEN)
