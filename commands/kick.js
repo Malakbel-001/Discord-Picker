@@ -1,4 +1,4 @@
-module.exports = message => {
+exports.run = (client, message, [mention, ...reason]) => {
     const member = message.mentions.members.first()
 
     if (!member) {

@@ -28,6 +28,14 @@ class GuildSql {
         deleteGuild.run(guild.discordId);
     }
 
+    // GET PREFIX
+    getPrefix(guild) {
+        const getGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
+
+        const foundGuild = getGuild.get(guild.id);
+        return foundGuild.prefix;
+    }
+
     // Check if the database/table exists. If not create guilds TABLE
     checkDbExists() {
         // Check if the sqlite table "guilds" exists.
