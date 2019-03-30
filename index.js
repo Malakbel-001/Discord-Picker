@@ -32,4 +32,6 @@ fs.readdir("./commands/", (err, files) => { // commandHandler
   });
 });
 
+client.on('error', console.error); // in case of random occurring hard to reproduce error
+
 client.login(process.env.BOT_TOKEN)

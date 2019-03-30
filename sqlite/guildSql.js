@@ -1,5 +1,5 @@
 const SQLite = require("better-sqlite3");
-const sql = new SQLite('./guilds.sqlite', { verbose: console.log });
+const sql = new SQLite('./guilds.sqlite');
 const CacheService = require('../util/cache');
 
 /**
