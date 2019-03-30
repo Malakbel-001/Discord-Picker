@@ -43,8 +43,15 @@ class GuildSql {
             return findGuild.get(guild.id).prefix;
         }
         return this.cache.get(key, getPrefixFromDb);
+    }
 
-        // const foundGuild = findGuild.get(guild.id);
+    // SET PREFIX
+    setPrefix(guild, newPrefix) {
+        const updateGuild = sql.prepare("UPDATE guilds SET prefix = ? WHERE discordId = ?");
+        const key = `getPrefixById_${guild.id}`;
+
+        this.cache.del(key); // delete cache by key to prevent cache issue while prefix is updated
+        updateGuild.run(newPrefix, guild.id);
     }
 
     // Check if the database/table exists. If not create guilds TABLE

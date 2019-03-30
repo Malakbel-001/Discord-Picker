@@ -6,20 +6,26 @@ class Cache {
     }
 
     get(key, getResultFromDb) {
-        const value = this.cache.get(key);
-        if (value) {
-            return value;
+        // Get value from cache by key
+        const valueFromCache = this.cache.get(key);
+        // Use value from cache if possible
+        if (valueFromCache) { 
+            return valueFromCache;
         }
-        const resultValue = getResultFromDb();
-        this.cache.set(key, resultValue);
-        return resultValue;
+
+        // Get from Database instead if there's no cache yet
+        const valueFromDb = getResultFromDb(); 
+        // Update cache
+        this.cache.set(key, valueFromDb); 
+        // Get value from Database
+        return valueFromDb;
     }
 
     del(keys) {
         this.cache.del(keys);
     }
 
-    delStartWith(startStr = '') {
+    delStartWith(startStr = '') { // Not used atm
         if (!startStr) {
             return;
         }
@@ -32,7 +38,7 @@ class Cache {
         }
     }
 
-    flush() {
+    flush() { // TODO: Not used atm
         this.cache.flushAll();
     }
 }
