@@ -1,15 +1,11 @@
-const guildSql = require('../sqlite/guildSql')
-
 module.exports = (client, message) => {
     if (message.author.bot) return;
 
-    const sql = new guildSql();
-
     // Ignore messages not starting with the prefix (in config.json)
-    if (message.content.indexOf(sql.getPrefix(message.guild)) !== 0) return; // temporarily from process.env for testing purposes
+    if (message.content.indexOf(client.sql.getPrefix(message.guild)) !== 0) return; // temporarily from process.env for testing purposes
 
     // Our standard argument/command name definition.
-    const args = message.content.slice(sql.getPrefix(message.guild).length).trim().split(/ +/g);
+    const args = message.content.slice(client.sql.getPrefix(message.guild).length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
 
     // Grab the command data from the client.commands Enmap

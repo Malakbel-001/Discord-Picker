@@ -1,12 +1,12 @@
-require('dotenv').config()
+require('dotenv').config();
 
-const Discord = require('discord.js')
-const fs = require('fs')
+const Discord = require('discord.js');
+const fs = require('fs');
 const Enmap = require("enmap");
-const guildSql = require('./sqlite/guildSql')
+const guildSql = require('./sqlite/guildSql');
 
-const client = new Discord.Client()
-client.sql = new guildSql() // Singleton of GuildSql inside the Client object
+const client = new Discord.Client();
+client.sql = new guildSql(); // Singleton of GuildSql inside the Client object
 
 fs.readdir('./events/', (err, files) => { // eventHandler
     files.forEach(file => {
@@ -18,15 +18,14 @@ fs.readdir('./events/', (err, files) => { // eventHandler
 
 client.commands = new Enmap();
 
-fs.readdir("./commands/", (err, files) => {
+fs.readdir("./commands/", (err, files) => { // commandHandler
   if (err) return console.error(err);
-  files.forEach(file => {
+  files.forEach(file => { 
     if (!file.endsWith(".js")) return;
     let props = require(`./commands/${file}`);
     let commandName = file.split(".")[0];
     client.commands.set(commandName, props);
   });
 });
-
 
 client.login(process.env.BOT_TOKEN)

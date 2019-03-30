@@ -16,6 +16,7 @@
     "discord.js": "^11.4.2",
     "dotenv": "^7.0.0",
     "enmap": "^4.8.1",
+    "node-cache": "^4.2.0",
     "node-gyp": "^3.8.0"
   },
   "devDependencies": {

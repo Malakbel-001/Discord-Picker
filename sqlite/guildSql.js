@@ -1,10 +1,16 @@
 const SQLite = require("better-sqlite3");
 const sql = new SQLite('./guilds.sqlite', { verbose: console.log });
+const CacheService = require('../util/cache');
 
 /**
  * Various (better-)SQLite functions to control the guilds.sqlite database file
  */
 class GuildSql {
+    constructor() {
+        this.ttl = 60 * 60 * 1; // cache for 1 Hour
+        this.cache = new CacheService(this.ttl); // Create a new cache service instance
+    }
+
     // INSERT GUILD
     insertGuild(guild) {
         const insert = sql.prepare(`INSERT OR REPLACE INTO guilds (discordId, serverName, region, ownerName, ownerId) 
@@ -30,10 +36,15 @@ class GuildSql {
 
     // GET PREFIX
     getPrefix(guild) {
-        const getGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
+        const findGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
+        const key = `getPrefixById_${guild.id}`;
 
-        const foundGuild = getGuild.get(guild.id);
-        return foundGuild.prefix;
+        function getPrefixFromDb() {
+            return findGuild.get(guild.id).prefix;
+        }
+        return this.cache.get(key, getPrefixFromDb);
+
+        // const foundGuild = findGuild.get(guild.id);
     }
 
     // Check if the database/table exists. If not create guilds TABLE

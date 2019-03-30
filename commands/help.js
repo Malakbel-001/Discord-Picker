@@ -1,6 +1,4 @@
 exports.run = (client, message, [mention, ...reason]) => {
-    const sql = new guildSql();
-
     const help_message = `
 \`\`\`
 ${client.sql.getPrefix(message.guild)}ping                   - Pong!
