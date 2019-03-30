@@ -37,8 +37,7 @@ npm run dev
 
 ### If you want to run your own Discord bot
 
-https://medium.freecodecamp.org/how-to-create-a-discord-bot-under-15-minutes-fb2fd0083844
-
-- Discord.js - NodeJS library for interfacing with the Discord API
+- https://medium.freecodecamp.org/how-to-create-a-discord-bot-under-15-minutes-fb2fd0083844
 - https://discord.js.org/#/docs/main/stable/general/welcome
+- https://discordjs.guide/
 - https://anidiots.guide/
