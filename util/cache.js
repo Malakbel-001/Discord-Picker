@@ -38,7 +38,7 @@ class Cache {
         }
     }
 
-    flush() { // TODO: Not used atm
+    flush() { // Not used atm
         this.cache.flushAll();
     }
 }
