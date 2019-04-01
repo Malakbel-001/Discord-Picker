@@ -1,5 +1,5 @@
 const SQLite = require("better-sqlite3");
-const sql = new SQLite('./guilds.sqlite');
+const sql = new SQLite('./guilds.sqlite', { verbose: console.log });
 const CacheService = require('../util/cache');
 
 /**
@@ -66,7 +66,7 @@ class GuildSql {
                 ownerName TEXT NOT NULL, 
                 ownerId INTEGER NOT NULL,
                 prefix TEXT DEFAULT '!' NOT NULL,
-                defaultChannelId INTEGER);`).run();
+                defaultChannelId TEXT);`).run();
         // Ensure that the "id" row is always unique and indexed.
     }
 
