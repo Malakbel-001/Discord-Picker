@@ -54,6 +54,27 @@ class GuildSql {
         updateGuild.run(newPrefix, guild.id);
     }
 
+    getDsPickerChannel(guild) {
+        const findGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
+        const key = `getDsPickerChannelById_${guild.id}`;
+
+        function getDsPickerIdFromDb() {
+            return findGuild.get(guild.id).discordPickerChannelId;;
+        }
+        return this.cache.get(key, getDsPickerIdFromDb);
+
+        return findGuild.get(guild.id).discordPickerChannelId;
+    }
+
+    // SET DISCORD-PICKER CHANNEL
+    setDsPickerChannel(guild, newChannelId) {
+        const updateGuild = sql.prepare("UPDATE guilds SET discordPickerChannelId = ? WHERE discordId = ?");
+        const key = `getDsPickerChannelById_${guild.id}`;
+
+        this.cache.del(key); // delete cache by key to prevent cache issue while prefix is updated
+        updateGuild.run(newChannelId, guild.id);
+    }
+
     // Check if the database/table exists. If not create guilds TABLE
     checkDbExists() {
         // Check if the sqlite table "guilds" exists.
@@ -66,7 +87,8 @@ class GuildSql {
                 ownerName TEXT NOT NULL, 
                 ownerId INTEGER NOT NULL,
                 prefix TEXT DEFAULT '!' NOT NULL,
-                defaultChannelId TEXT);`).run();
+                discordPickerChannelId TEXT,
+                calendarChannelId TEXT);`).run();
         // Ensure that the "id" row is always unique and indexed.
     }
 

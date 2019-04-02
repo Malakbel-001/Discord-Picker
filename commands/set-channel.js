@@ -13,6 +13,8 @@ exports.run = (client, message, args) => {
 
                         if (reaction.emoji.name === '🇾') {
                             message.reply('you reacted with a thumbs up.');
+                            client.sql.setDsPickerChannel(message.guild, message.channel.id);
+                            message.reply(message.channel.id);
                         } else {
                             message.reply('you reacted with a thumbs down.');
                         }
