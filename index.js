@@ -6,7 +6,9 @@ const Enmap = require("enmap");
 const guildSql = require('./sqlite/guildSql');
 
 const client = new Discord.Client();
+client.commands = new Discord.Collection();
 client.sql = new guildSql(); // Singleton of GuildSql inside the Client object
+client.cooldowns = new Discord.Collection();
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir('./events/', (err, files) => { // eventHandler
@@ -19,19 +21,13 @@ fs.readdir('./events/', (err, files) => { // eventHandler
   })
 })
 
-client.commands = new Enmap();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-// This loop reads the /commands/ folder and attaches each command to the client.commands Enmap.
-fs.readdir("./commands/", (err, files) => { // commandHandler
-  if (err) return console.error(err);
-  files.forEach(file => {
-    if (!file.endsWith(".js")) return;
-    let props = require(`./commands/${file}`);
-    let commandName = file.split(".")[0];
-    client.commands.set(commandName, props);
-  });
-});
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.name, command);
+}
 
-client.on('error', console.error); // in case of random occurring hard to reproduce error
+client.on('error', console.error); // in case of random occurring hard to reproduce error. I.e. ECONERROR
 
 client.login(process.env.BOT_TOKEN)

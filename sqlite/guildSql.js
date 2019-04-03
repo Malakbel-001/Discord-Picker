@@ -40,6 +40,10 @@ class GuildSql {
 
     // GET PREFIX
     getPrefix(guild) {
+        if(!guild) { // in case of DM
+            return process.env.PREFIX;
+        }
+
         const findGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
         const key = `getPrefixById_${guild.id}`;
 
