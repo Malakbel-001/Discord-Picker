@@ -17,7 +17,7 @@ Download the source and put it in an approriate folder where you want to run the
 
 * [Node.js](https://nodejs.org/en/) - v8 or higher
 * [node-gyp](https://github.com/nodejs/node-gyp#installation) - Needed to run better-sqlite3
-* [Discord token](https://medium.freecodecamp.org/how-to-create-a-discord-bot-under-15-minutes-fb2fd0083844) - Setup your own Discord bot
+* [Discord token](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) - Setup your own Discord bot
 
 ```
 npm install
