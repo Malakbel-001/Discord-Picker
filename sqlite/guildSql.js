@@ -27,6 +27,10 @@ class GuildSql {
         insert.run(newGuild);
     }
 
+    insertSchedule(guild) {
+        //TODO:
+    }
+
     // DELETE GUILD
     deleteGuild(guild) {
         const deleteGuild = sql.prepare(`DELETE FROM guilds WHERE discordId = ?`);
@@ -90,6 +94,10 @@ class GuildSql {
                 discordPickerChannelId TEXT,
                 calendarChannelId TEXT);`).run();
         // Ensure that the "id" row is always unique and indexed.
+
+        // sql.prepare(`CREATE TABLE IF NOT EXISTS schedule ( //TODO:
+        //     discordId TEXT PRIMARY KEY NOT NULL,
+        //     days TEXT);`).run();
     }
 
     // Check-update the database on guilds added/kicked during downtime
