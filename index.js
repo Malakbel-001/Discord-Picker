@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const Discord = require('discord.js');
 const fs = require('fs');
-const Enmap = require("enmap");
 const guildSql = require('./sqlite/guildSql');
 
 const client = new Discord.Client();
