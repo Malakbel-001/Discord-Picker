@@ -11,11 +11,11 @@ module.exports = {
 		if (!args.length) {
 			data.push('Here\'s a list of all my commands:');
 			data.push(commands.map(command => command.name).join(', '));
-            data.push(`\nYou can send \`${message.client.sql.getPrefix(message.guild)}help [command name]\` to get info on a specific command on the server!`);
-            if(process.env.PREFIX !== message.client.sql.getPrefix(message.guild)) {
-                data.push(`\nImportant note; when you DM me for help use this command instead:`);
-                data.push(`\`${process.env.PREFIX}help [command name]\``);
-            }
+			data.push(`\nYou can send \`${message.client.sql.getPrefix(message.guild)}help [command name]\` to get info on a specific command on the server!`);
+			if (process.env.PREFIX !== message.client.sql.getPrefix(message.guild)) {
+				data.push(`\nImportant note; when you DM me for help use this command instead:`);
+				data.push(`\`${process.env.PREFIX}help [command name]\``);
+			}
 
 			return message.author.send(data, { split: true })
 				.then(() => {

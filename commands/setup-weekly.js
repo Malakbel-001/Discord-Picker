@@ -1,8 +1,8 @@
 exports.run = (client, message, args) => {
-    // setup channel
-    
+	// setup channel
 
-    // set all the days and times
 
-    // close setup
+	// set all the days and times
+
+	// close setup
 }
