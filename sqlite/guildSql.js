@@ -8,9 +8,9 @@ const CacheService = require('../util/cache');
 class GuildSql {
 	constructor() {
 		// Cache for 1 Hour
-		this.ttl = 60 * 60 * 1; 
+		this.ttl = 60 * 60 * 1;
 		// Create a new cache service instance
-		this.cache = new CacheService(this.ttl); 
+		this.cache = new CacheService(this.ttl);
 	}
 
 	// INSERT GUILD
@@ -72,7 +72,7 @@ class GuildSql {
 		const key = `getDsPickerChannelById_${guild.id}`;
 
 		function getDsPickerIdFromDb() {
-			return findGuild.get(guild.id).discordPickerChannelId;;
+			return findGuild.get(guild.id).discordPickerChannelId;
 		}
 		return this.cache.get(key, getDsPickerIdFromDb);
 	}
@@ -119,7 +119,7 @@ class GuildSql {
 			if (!foundMissingGuildToAdd) {
 				this.insertGuild(clientGuild);
 			}
-		})
+		});
 
 		// check for guilds that kicked the bot during downtime and delete from database
 		const getAllGuilds = sql.prepare("SELECT * FROM guilds");
@@ -128,7 +128,7 @@ class GuildSql {
 			if (!foundBotKickedFromGuild) {
 				this.deleteGuild(databaseGuild);
 			}
-		})
+		});
 	}
 }
 

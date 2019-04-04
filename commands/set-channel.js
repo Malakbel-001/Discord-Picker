@@ -18,17 +18,18 @@ module.exports = {
 
 							if (reaction.emoji.name === '🇾') {
 								message.reply('you reacted with a thumbs up.');
-								client.sql.setDsPickerChannel(message.guild, message.channel.id);
+								message.client.sql.setDsPickerChannel(message.guild, message.channel.id);
 								message.reply(message.channel.id);
-							} else {
+							}
+							else {
 								message.reply('you reacted with a thumbs down.');
 							}
 						})
 						.catch(collected => {
 							console.log(`After a minute, only ${collected.size} out of 4 reacted.`);
 							message.reply('you didn\'t react with neither a yes or no.');
-						}))
+						}));
 			})
 			.catch(console.error);
-	}
-}
+	},
+};

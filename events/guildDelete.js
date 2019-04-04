@@ -1,6 +1,3 @@
-const guildSql = require('../sqlite/guildSql')
-
 module.exports = (client, guild) => {
-	const sql = new guildSql();
-	sql.deleteGuild(guild);
+	client.sql.deleteGuild(guild);
 };
