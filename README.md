@@ -31,11 +31,23 @@ PREFIX=!
 
 ### Put the private-googleapikey.json in your main directory
 
+To run your bot locally for testing purposes:
+
 ```
 npm run dev
+```
+
+If you want to run the bot for your own server(s):
+
+```
+npm start
 ```
 
 ## Discord JS docs & guides for coding
 - https://discord.js.org/#/docs/
 - https://discordjs.guide/
 - https://anidiots.guide/
+
+### Recommended free hosting:
+- Redhat Openshift
+- Heroku
