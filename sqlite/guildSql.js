@@ -16,7 +16,7 @@ class GuildSql {
 
 	// INSERT GUILD
 	insertGuild(guild) {
-		const insert = sql.prepare(`INSERT OR REPLACE INTO guilds (discordId, serverName, region, ownerName, ownerId) 
+		const insert = sql.prepare(stripIndents`INSERT OR REPLACE INTO guilds (discordId, serverName, region, ownerName, ownerId) 
                 VALUES (@discordId, @serverName, @region, @ownerName, @ownerId)`);
 
 		const newGuild = {
@@ -37,7 +37,7 @@ class GuildSql {
 
 	// DELETE GUILD
 	deleteGuild(guild) {
-		const deleteGuild = sql.prepare(`DELETE FROM guilds WHERE discordId = ?`);
+		const deleteGuild = sql.prepare("DELETE FROM guilds WHERE discordId = ?");
 
 		deleteGuild.run(guild.discordId);
 	}
@@ -63,9 +63,28 @@ class GuildSql {
 		const updateGuild = sql.prepare("UPDATE guilds SET prefix = ? WHERE discordId = ?");
 		const key = `getPrefixById_${guild.id}`;
 
-		// delete cache by key to prevent cache issue while prefix is updated
 		this.cache.del(key);
 		updateGuild.run(newPrefix, guild.id);
+	}
+
+	// GET GOOGLE CALENDAR ID
+	getGoogleCalendarId(guild) {
+		const findGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
+		const key = `getGoogleCalendarIdByGuildId_${guild.id}`;
+
+		function getGoogleCalendarIdFromDb() {
+			return findGuild.get(guild.id).googleCalendarId;
+		}
+		return this.cache.get(key, getGoogleCalendarIdFromDb);
+	}
+
+	// SET GOOGLE CALENDAR ID
+	setGoogleCalendarId(guild, newGoogleCalendarId) {
+		const updateGuild = sql.prepare("UPDATE guilds SET googleCalendarId = ? WHERE discordId = ?");
+		const key = `getGoogleCalendarIdByGuildId_${guild.id}`;
+
+		this.cache.del(key);
+		updateGuild.run(newGoogleCalendarId, guild.id);
 	}
 
 	getDsPickerChannel(guild) {
@@ -83,12 +102,11 @@ class GuildSql {
 		const updateGuild = sql.prepare("UPDATE guilds SET discordPickerChannelId = ? WHERE discordId = ?");
 		const key = `getDsPickerChannelById_${guild.id}`;
 
-		// delete cache by key to prevent cache issue while channel is updated
 		this.cache.del(key);
 		updateGuild.run(newChannelId, guild.id);
 	}
 
-	// Check if the database/table exists. If not create guilds TABLE
+	// CHECK IF THE DATABASE/TABLE EXISTS. IF NOT CREATE guilds TABLE
 	checkDbExists() {
 		// Check if the sqlite table "guilds" exists.
 		// If the table isn't there, create it and setup the database correctly.
@@ -110,7 +128,7 @@ class GuildSql {
 		//     days TEXT);`).run();
 	}
 
-	// Check-update the database on guilds added/kicked during downtime
+	// CHECK-UPDATE THE DATABASE ON GUILDS ADDED/KICKED DURING DOWNTIME
 	checkMissingGuilds(client) {
 		// getGuild sql statement
 		const getGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");

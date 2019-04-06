@@ -1,7 +1,6 @@
 module.exports = {
-	name: 'set-channel',
-	description: 'Set a channel as the Discord-Picker channel to check for player availabilities',
-	usage: '[message count]',
+	name: 'setup-weekly-availability-checker',
+	description: 'Setup a weekly availabilities picker to fill out for your team',
 	guildOnly: true,
 	execute(message) {
 		// setup channel

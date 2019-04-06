@@ -1,7 +1,8 @@
 module.exports = {
-	name: 'set-channel',
+	name: 'set-availability-channel',
 	description: 'Set a channel as the Discord-Picker channel to check for player availabilities',
 	usage: '[message count]',
+	aliases: ['availability-channel', 'set-channel'],
 	guildOnly: true,
 	execute(message) {
 		const filter = (reaction, user) => {
