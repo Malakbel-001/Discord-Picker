@@ -1,11 +1,11 @@
-# malakbel-bot
+# Discord-Picker.
 
-This is my personal Discord bot for the time being
+This is still a work in progress.
 
 ### Looking to implement :
-- Asking availabilities from players on server
+- Availability Checker
 - Google API
-- Maybe League API also
+- Bonus: League API for other functionality
 
 ## Installation
 
