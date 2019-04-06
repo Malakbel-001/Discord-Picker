@@ -39,7 +39,7 @@ To run your bot locally for testing purposes:
 npm run dev
 ```
 
-If you want to run the bot for your own server(s):
+If you want to run the bot for your own Discord server(s):
 
 ```
 npm start
