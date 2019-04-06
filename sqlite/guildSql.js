@@ -1,6 +1,7 @@
 const SQLite = require("better-sqlite3");
 const sql = new SQLite('./guilds.sqlite', { verbose: console.log });
 const CacheService = require('../util/cache');
+const { stripIndents } = require('common-tags');
 
 /**
  * Various (better-)SQLite functions to control the guilds.sqlite database file
@@ -91,16 +92,17 @@ class GuildSql {
 	checkDbExists() {
 		// Check if the sqlite table "guilds" exists.
 		// If the table isn't there, create it and setup the database correctly.
-		sql.prepare(`CREATE TABLE IF NOT EXISTS guilds (
-                id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                discordId TEXT NOT NULL,
-                serverName TEXT NOT NULL, 
-                region TEXT NOT NULL, 
-                ownerName TEXT NOT NULL, 
-                ownerId INTEGER NOT NULL,
-                prefix TEXT DEFAULT '!' NOT NULL,
-                discordPickerChannelId TEXT,
-                calendarChannelId TEXT);`).run();
+		sql.prepare(stripIndents`CREATE TABLE IF NOT EXISTS guilds (
+			id INTEGER PRIMARY KEY AUTOINCREMENT, 
+			discordId TEXT NOT NULL,
+			serverName TEXT NOT NULL, 
+			region TEXT NOT NULL, 
+			ownerName TEXT NOT NULL, 
+			ownerId INTEGER NOT NULL,
+			prefix TEXT DEFAULT '!' NOT NULL,
+			googleCalendarId TEXT,
+			discordPickerChannelId TEXT,
+			calendarChannelId TEXT);`).run();
 		// Ensure that the "id" row is always unique and indexed.
 
 		// sql.prepare(`CREATE TABLE IF NOT EXISTS schedule ( //TODO:
