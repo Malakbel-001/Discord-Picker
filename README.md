@@ -9,15 +9,13 @@ This is still a work in progress.
 
 ## Installation
 
-```
 Download or fork the source and put it in an approriate folder where you want to run the bot from
-```
 
 ### Prerequisites
 
 * [Node.js](https://nodejs.org/en/) - v8 or higher
 * [node-gyp](https://github.com/nodejs/node-gyp#installation) - Needed to run better-sqlite3
-* [Discord token](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) - Setup your own Discord bot
+* [Discord token](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) - Setup and get your own Discord bot (token)
 
 ```
 npm install
