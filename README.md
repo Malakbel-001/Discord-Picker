@@ -10,7 +10,7 @@ This is still a work in progress.
 ## Installation
 
 ```
-Download the source and put it in an approriate folder where you want to run the bot from
+Download or fork the source and put it in an approriate folder where you want to run the bot from
 ```
 
 ### Prerequisites
