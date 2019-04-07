@@ -2,10 +2,10 @@ const moment = require('moment');
 const { stripIndents } = require('common-tags');
 
 module.exports = {
-	name: 'test-calendar',
+	name: 'display-upcoming-events',
 	description: 'Test temp.',
 	guildOnly: true,
-	aliases: ['test'],
+	aliases: ['display', 'disp'],
 	execute(message) {
 		message.client.calendar.events.list({
 			auth: message.client.jwtClient,
