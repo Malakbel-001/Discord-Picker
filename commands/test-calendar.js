@@ -10,12 +10,20 @@ module.exports = {
 		message.client.calendar.events.list({
 			auth: message.client.jwtClient,
 			calendarId: message.client.sql.getGoogleCalendarId(message.guild),
+			timeMin: moment().format(),
+			// orderBy: 'startTime',
 		}, function(err, response) {
 			// console.log(response);
-			response.data.items.forEach(function(item) {
-				message.channel.send(stripIndents` \`\`\`Event: ${item.summary} 
-				Start: ${moment(item.start.dateTime).format('dddd DD/MM/YY HH:mm Z')} 
-				End  : ${moment(item.end.dateTime).format('dddd DD/MM/YY HH:mm Z')}\`\`\``);
+			// console.log(response.data.items);
+			response.data.items.sort(function(eventA, eventB) {
+				const dateA = new Date(eventA.start.dateTime), dateB = new Date(eventB.start.dateTime);
+				return dateA - dateB;
+			});
+
+			response.data.items.forEach(function(event) {
+				message.channel.send(stripIndents` \`\`\`Event: ${event.summary} 
+				Start: ${moment(event.start.dateTime).format('dddd DD/MM/YY HH:mm Z')} 
+				End  : ${moment(event.end.dateTime).format('dddd DD/MM/YY HH:mm Z')}\`\`\``);
 			});
 		});
 	},
