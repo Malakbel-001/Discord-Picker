@@ -3,6 +3,6 @@ module.exports = {
 	description: 'Ping!',
 	cooldown: 5,
 	execute(message) {
-		message.channel.send(`pong${message.content.charAt(0)}`).catch(console.error);
+		message.channel.send(`pong${message.client.sql.getPrefix(message.guild)}`).catch(console.error);
 	},
 };
