@@ -30,16 +30,11 @@ class GuildSql {
 		insert.run(newGuild);
 	}
 
-	insertSchedule(guild) {
-		console.log(guild);
-		// TODO:
-	}
-
 	// DELETE GUILD
 	deleteGuild(guild) {
 		const deleteGuild = sql.prepare("DELETE FROM guilds WHERE discordId = ?");
 
-		deleteGuild.run(guild.discordId);
+		deleteGuild.run(guild.id);
 	}
 
 	// GET PREFIX

@@ -12,18 +12,24 @@ module.exports = {
 		// Slice off the prefix from the message
 		const messageContentArray = message.content.split(" ");
 
-		message.channel.send(messageContentArray[0]);
+		// Separating the new event from the command
 		const newQuickEvent = message.content.substr(messageContentArray[0].length + 1);
-		message.channel.send(newQuickEvent);
 
 		message.client.calendar.events.quickAdd({
 			auth: message.client.jwtClient,
 			calendarId: message.client.sql.getGoogleCalendarId(message.guild),
 			text: newQuickEvent,
 		}, function(err, response) {
-			message.channel.send(stripIndents` \`\`\`Event: ${response.data.summary} 
-				Start: ${moment(response.data.start.dateTime).format('dddd DD/MM/YY HH:mm Z')} 
-				End  : ${moment(response.data.end.dateTime).format('dddd DD/MM/YY HH:mm Z')}\`\`\``);
+			if(err) {
+				console.error(err.errors);
+			}
+
+			if(response !== undefined) {
+				message.channel.send(stripIndents` \`\`\`Event: ${response.data.summary} 
+					Start: ${moment(response.data.start.dateTime).format('dddd DD/MM/YY HH:mm Z')} 
+					End  : ${moment(response.data.end.dateTime).format('dddd DD/MM/YY HH:mm Z')}\`\`\``);
+			}
+
 		});
 	},
 };
