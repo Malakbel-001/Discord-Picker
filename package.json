@@ -16,6 +16,7 @@
     "common-tags": "^1.8.0",
     "discord.js": "^11.4.2",
     "dotenv": "^7.0.0",
+    "enum": "^2.5.0",
     "eslint": "^5.16.0",
     "googleapis": "^39.2.0",
     "moment": "^2.24.0",
