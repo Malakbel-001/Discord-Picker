@@ -26,10 +26,6 @@ client.jwtClient.authorize(function(err) {
 		console.log(err);
 		return;
 	}
-	// TODO: temporary
-	else {
-		console.log("Successfully connected for usage google calendar api!");
-	}
 });
 
 
@@ -51,7 +47,10 @@ for (const file of commandFiles) {
 	client.commands.set(command.name, command);
 }
 
-// in case of random occurring hard to reproduce error. I.e. ECONERROR
-client.on('error', console.error);
+// In case of random occurring hard to reproduce error. I.e. ECONERROR or ETIMEDOUT
+client.on('error', (err) => {
+	// Abbreviating the error; By a lot
+	console.error(err.message);
+});
 
 client.login(process.env.BOT_TOKEN);
