@@ -1,7 +1,8 @@
 const SQLite = require("better-sqlite3");
-const sql = new SQLite('./guilds.sqlite', { verbose: console.log });
-const CacheService = require('../util/cache');
+const CacheService = require('../utils/cache');
 const { stripIndents } = require('common-tags');
+// eslint-disable-next-line no-inline-comments
+const sql = new SQLite('./guilds.sqlite');// , { verbose: console.log });
 
 /**
  * Various (better-)SQLite functions to control the guilds.sqlite database file
