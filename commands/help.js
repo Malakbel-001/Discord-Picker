@@ -41,7 +41,7 @@ module.exports = {
 		if (command.description) data.push(`**Description:** ${command.description}`);
 		if (command.usage) data.push(`**Usage:** ${message.client.sql.getPrefix(message.guild)}${command.name} ${command.usage}`);
 
-		data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
+		data.push(`**Cooldown:** ${command.cooldown || 1} second(s)`);
 
 		message.channel.send(data, { split: true });
 	},
