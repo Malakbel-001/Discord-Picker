@@ -1,5 +1,7 @@
 const strings = require('../strings/setup');
-const continueEnum = require('../enums/setup');
+const { questionEnum, calendarSetupEnum, questionMap, calendarMap } = require('../enums/setup');
+const { oneLineCommaListsOr } = require('common-tags');
+const moment = require('moment-timezone');
 
 module.exports = {
 	name: 'setup',
@@ -7,11 +9,15 @@ module.exports = {
 	guildOnly: true,
 	aliases: ['s'],
 	async execute(message) {
+		// eslint-disable-next-line no-unused-vars
+		let promiseValue;
+		let timeZoneValue;
+
 		try {
 			await message.reply(strings.setupStart);
-			const promiseValue = await awaitYesNo(message.author.id, message);
-			await goNext(promiseValue, awaitYesNo, function() { message.reply("hi"); });
-
+			promiseValue = await question(message, questionMap, questionEnum);
+			promiseValue = await createAvailabilityOptionsCalendar(message, promiseValue, timeZoneValue);
+			// promiseValue = await goNext(promiseValue, awaitYesNo, createAvailabilityOptionsCalendar, paramsObjYesNo);
 
 		}
 		catch (error) {
@@ -24,49 +30,92 @@ module.exports = {
 	},
 };
 
-function checkYes(m) { return m === "y" || m === "yes"; }
-function checkNo(m) { return m === "n" || m === "no"; }
-function checkCancel(m) { return m === "c" || m === "cancel"; }
-
-function awaitYesNo(initiatorId, message) {
-	return new Promise(resolve => {
+function question(message, enumMap, qEnum) {
+	return new Promise(function repeat(resolve) {
 		const filter = newMessage => {
-			return initiatorId = newMessage.author.id;
+			return message.author.id === newMessage.author.id;
 		};
-		console.log("run");
+
 		message.channel.awaitMessages(filter, { max: 1, time: 10000, errors: ['time'] })
 			.then(collected => {
-				if (checkYes(collected.first().content)) 			{ resolve(continueEnum.Yes); }
-				else if (checkNo(collected.first().content)) 		{ resolve(continueEnum.No); }
-				else if (checkCancel(collected.first().content)) 	{ resolve(continueEnum.Cancel); }
+				const enumFromMap = enumMap.get(collected.first().content);
+				if (enumFromMap !== undefined) {
+					resolve(enumFromMap);
+				}
 				else {
-					console.log("else");
-					message.reply("Please reply with yes, no or cancel");
-					resolve(continueEnum.Again);
+					message.reply(oneLineCommaListsOr`Please reply with **${qEnum.enums}**`);
+					repeat(resolve);
 				}
 			})
 			.catch(() => {
-				console.log("catch");
-				message.reply("Please reply with yes, no or cancel");
-				resolve(continueEnum.Again);
+				message.reply(oneLineCommaListsOr`Please reply with **${qEnum.enums}**`);
+				repeat(resolve);
 			});
 	});
 }
 
-async function goNext(promiseValue, previousFunc, nextFunc) {
-	return new Promise(resolve => {
-		switch (promiseValue.value) {
-			case continueEnum.Yes.value:
-				nextFunc();
-				break;
-			case continueEnum.No.value:
-				console.log("no");
-				// skip
-				break;
-			case continueEnum.Again.value:
-				console.log("durr");
-				// promiseValue = previousFunc;
-		}
-		return resolve(promiseValue);
+function checkTimeZone(message) {
+	return new Promise(function repeat(resolve) {
+		const filter = newMessage => {
+			return message.author.id === newMessage.author.id;
+		};
+
+		message.channel.awaitMessages(filter, { max: 1, time: 10000, errors: ['time'] })
+			.then(collected => {
+				if (moment.tz.zone(collected.first().content)) {
+					message.reply(moment.tz.zone(collected.first().content).name);
+					resolve(moment.tz.zone(collected.first().content).name);
+				}
+				else if(collected.first().content === "skip") {
+					resolve(calendarSetupEnum.skip);
+				}
+				else if(collected.first().content === "stop") {
+					resolve(questionEnum.stop);
+				}
+				else {
+					message.reply(`Please reply with a correct timezone`);
+					repeat(resolve);
+				}
+			})
+			.catch(() => {
+				message.reply(`Please reply with a correct timezone`);
+				repeat(resolve);
+			});
 	});
 }
+
+async function createAvailabilityOptionsCalendar(message, promiseValue, timeZoneValue) {
+	console.log(promiseValue);
+	if(promiseValue === questionEnum.Yes) {
+		message.reply(strings.setupAvailabilityChannel);
+
+		promiseValue = await question(message, calendarMap, calendarSetupEnum);
+		console.log(promiseValue);
+		if(promiseValue === calendarSetupEnum.Create) {
+			message.reply(strings.setupTimeZone);
+			timeZoneValue = await checkTimeZone(message);
+			if(timeZoneValue === questionEnum.Stop || timeZoneValue === calendarSetupEnum.Skip) {
+				promiseValue = timeZoneValue;
+			}
+			else {
+				message.client.calendar.calendars.insert({
+					auth: message.client.jwtClient,
+					requestBody: {
+						summary: `Availability-Checker for: ${message.guild.name}`,
+						timeZone: timeZoneValue,
+					},
+				}, (err, response) => {
+					if (err) {
+						console.error(err);
+					}
+			
+					console.log(response);
+				});
+			}
+		}
+		else if(promiseValue === calendarSetupEnum.Add) {
+			message.reply("Add todo");
+		}
+	}
+}
+
