@@ -1,11 +1,14 @@
 require('dotenv').config();
 
+// Set our required files
 const Discord = require('discord.js');
-const fs = require('fs');
+const fs = require('fs');		// file system
 const GuildSql = require('./sqlite/guildSql');
 const { google } = require('googleapis');
 const private_googleapikey = require("./private-googleapikey.json");
 
+// client is basically a singleton that all files have access to.
+// we use client to get access to our guilds/sql, command and such
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 client.cooldowns = new Discord.Collection();
@@ -40,8 +43,10 @@ fs.readdir('./events/', (err, files) => {
 	});
 });
 
+// Get all command files
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
+// Setting all the command files
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
