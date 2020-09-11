@@ -1,3 +1,5 @@
+// PROTECT
+
 module.exports = {
 	name: 'setup-weekly-availability-checker',
 	description: 'Setup a weekly availabilities picker to fill out for your team',

@@ -1,3 +1,4 @@
+// PROTECT
 const moment = require('moment');
 const { stripIndents } = require('common-tags');
 

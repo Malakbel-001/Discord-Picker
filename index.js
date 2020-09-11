@@ -1,3 +1,5 @@
+// PROTECT
+
 require('dotenv').config();
 
 // Set our required files

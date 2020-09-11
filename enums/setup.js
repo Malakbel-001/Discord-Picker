@@ -1,3 +1,5 @@
+// PROTECT
+
 const Enum = require('enum');
 
 const questionEnum = new Enum(

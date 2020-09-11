@@ -1,3 +1,5 @@
+// PROTECT
+
 module.exports = {
 	name: 'set-availability-channel',
 	description: 'Set a channel as the Discord-Picker channel to check for player availabilities',

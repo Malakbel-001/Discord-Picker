@@ -1,3 +1,5 @@
+// PROTECT
+
 module.exports = {
 	name: 'test-channel',
 	description: 'Test temp.',
