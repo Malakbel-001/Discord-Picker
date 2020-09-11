@@ -131,7 +131,7 @@ class GuildSql {
 		const getGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
 
 		// check for guilds that are added during downtime and add to database
-		client.guilds.forEach((clientGuild) => {
+		client.guilds.cache.forEach((clientGuild) => {
 			const foundMissingGuildToAdd = getGuild.get(clientGuild.id);
 			if (!foundMissingGuildToAdd) {
 				this.insertGuild(clientGuild);
@@ -141,7 +141,7 @@ class GuildSql {
 		// check for guilds that kicked the bot during downtime and delete from database
 		const getAllGuilds = sql.prepare("SELECT * FROM guilds");
 		getAllGuilds.all().forEach((databaseGuild) => {
-			const foundBotKickedFromGuild = client.guilds.get(databaseGuild.discordId);
+			const foundBotKickedFromGuild = client.guilds.fetch(databaseGuild.discordId);
 			if (!foundBotKickedFromGuild) {
 				this.deleteGuild(databaseGuild);
 			}
