@@ -5,7 +5,6 @@ const Discord = require('discord.js');
 const fs = require('fs');		// file system
 const GuildSql = require('./sqlite/guildSql');
 const { google } = require('googleapis');
-const private_googleapikey = require("./private-googleapikey.json");
 
 // client is basically a singleton that all files have access to.
 // we use client to get access to our guilds/sql, command and such
@@ -16,21 +15,6 @@ client.calendar = google.calendar('v3');
 
 // Singleton of GuildSql inside the Client object
 client.sql = new GuildSql();
-
-// Configure a JWT auth client for the Google API
-client.jwtClient = new google.auth.JWT(
-	private_googleapikey.client_email,
-	null,
-	private_googleapikey.private_key,
-	['https://www.googleapis.com/auth/calendar']);
-
-client.jwtClient.authorize(function(err) {
-	if (err) {
-		console.log(err);
-		return;
-	}
-});
-
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir('./events/', (err, files) => {
