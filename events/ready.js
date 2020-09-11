@@ -3,4 +3,7 @@ module.exports = client => {
 
 	client.sql.checkDbExists();
 	client.sql.checkMissingGuilds(client);
+
+	// cache messages for messageReaction event
+	// client.channels.cache.get("753947544354029618");
 };

@@ -15,6 +15,28 @@ class GuildSql {
 		this.cache = new CacheService(this.ttl);
 	}
 
+	// CHECK IF THE DATABASE/TABLE EXISTS. IF NOT CREATE guilds TABLE
+	checkDbExists() {
+		// Check if the sqlite table "guilds" exists.
+		// If the table isn't there, create it and setup the database correctly.
+		sql.prepare(stripIndents`CREATE TABLE IF NOT EXISTS guilds (
+			id INTEGER PRIMARY KEY AUTOINCREMENT, 
+			discordId TEXT NOT NULL,
+			serverName TEXT NOT NULL, 
+			region TEXT NOT NULL, 
+			ownerName TEXT NOT NULL, 
+			ownerId INTEGER NOT NULL,
+			prefix TEXT DEFAULT '!' NOT NULL,
+			googleCalendarId TEXT,
+			reactCheckerId TEXT,
+			calendarChannelId TEXT);`).run();
+		// Ensure that the "id" row is always unique and indexed.
+
+		// sql.prepare(`CREATE TABLE IF NOT EXISTS schedule ( //TODO:
+		//     discordId TEXT PRIMARY KEY NOT NULL,
+		//     days TEXT);`).run();
+	}
+
 	// INSERT GUILD
 	insertGuild(guild) {
 		const insert = sql.prepare(stripIndents`INSERT OR REPLACE INTO guilds (discordId, serverName, region, ownerName, ownerId) 
@@ -83,45 +105,24 @@ class GuildSql {
 		updateGuild.run(newGoogleCalendarId, guild.id);
 	}
 
-	getDsPickerChannel(guild) {
+	// GET REACT CHECKER
+	getReactCheckerId(guild) {
 		const findGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
-		const key = `getDsPickerChannelById_${guild.id}`;
+		const key = `getReactCheckerById_${guild.id}`;
 
 		function getDsPickerIdFromDb() {
-			return findGuild.get(guild.id).discordPickerChannelId;
+			return findGuild.get(guild.id).reactChecker;
 		}
 		return this.cache.get(key, getDsPickerIdFromDb);
 	}
 
-	// SET DISCORD-PICKER CHANNEL
-	setDsPickerChannel(guild, newChannelId) {
-		const updateGuild = sql.prepare("UPDATE guilds SET discordPickerChannelId = ? WHERE discordId = ?");
-		const key = `getDsPickerChannelById_${guild.id}`;
+	// SET REACT CHECKER
+	setReactCheckerId(guild, newChannelId) {
+		const updateGuild = sql.prepare("UPDATE guilds SET reactCheckerId = ? WHERE discordId = ?");
+		const key = `getReactCheckerById_${guild.id}`;
 
 		this.cache.del(key);
 		updateGuild.run(newChannelId, guild.id);
-	}
-
-	// CHECK IF THE DATABASE/TABLE EXISTS. IF NOT CREATE guilds TABLE
-	checkDbExists() {
-		// Check if the sqlite table "guilds" exists.
-		// If the table isn't there, create it and setup the database correctly.
-		sql.prepare(stripIndents`CREATE TABLE IF NOT EXISTS guilds (
-			id INTEGER PRIMARY KEY AUTOINCREMENT, 
-			discordId TEXT NOT NULL,
-			serverName TEXT NOT NULL, 
-			region TEXT NOT NULL, 
-			ownerName TEXT NOT NULL, 
-			ownerId INTEGER NOT NULL,
-			prefix TEXT DEFAULT '!' NOT NULL,
-			googleCalendarId TEXT,
-			discordPickerChannelId TEXT,
-			calendarChannelId TEXT);`).run();
-		// Ensure that the "id" row is always unique and indexed.
-
-		// sql.prepare(`CREATE TABLE IF NOT EXISTS schedule ( //TODO:
-		//     discordId TEXT PRIMARY KEY NOT NULL,
-		//     days TEXT);`).run();
 	}
 
 	// CHECK-UPDATE THE DATABASE ON GUILDS ADDED/KICKED DURING DOWNTIME
