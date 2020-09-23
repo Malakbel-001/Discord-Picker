@@ -6,4 +6,6 @@ module.exports = client => {
 
 	// cache messages for messageReaction event
 	// client.channels.cache.get("753947544354029618");
+	const allGuildChannelIds = client.sql.fetchGuildChannels();
+	console.log(allGuildChannelIds);
 };

@@ -28,8 +28,9 @@ class GuildSql {
 			ownerId INTEGER NOT NULL,
 			prefix TEXT DEFAULT '!' NOT NULL,
 			googleCalendarId TEXT,
-			reactCheckerId TEXT,
-			calendarChannelId TEXT);`).run();
+			guildMessageId TEXT,
+			guildChannelId TEXT);`).run();
+			
 		// Ensure that the "id" row is always unique and indexed.
 
 		// sql.prepare(`CREATE TABLE IF NOT EXISTS schedule ( //TODO:
@@ -85,6 +86,12 @@ class GuildSql {
 		updateGuild.run(newPrefix, guild.id);
 	}
 
+	// FETCH GUILD CHANNELS
+	fetchGuildChannels() {
+		const fetchAllChannels = sql.prepare("SELECT guildChannelId FROM guilds");
+		return fetchAllChannels.get();
+	}
+
 	// GET GOOGLE CALENDAR ID
 	getGoogleCalendarId(guild) {
 		const findGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
@@ -106,20 +113,44 @@ class GuildSql {
 	}
 
 	// GET REACT CHECKER
-	getReactCheckerId(guild) {
+	getGuildMessageId(guild) {
 		const findGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
-		const key = `getReactCheckerById_${guild.id}`;
+		const key = `getGuildMessageById_${guild.id}`;
 
-		function getDsPickerIdFromDb() {
-			return findGuild.get(guild.id).reactChecker;
+		function getGuildMessageIdFromDb() {
+			return findGuild.get(guild.id).guildMessageId;
 		}
-		return this.cache.get(key, getDsPickerIdFromDb);
+		return this.cache.get(key, getGuildMessageIdFromDb);
 	}
 
 	// SET REACT CHECKER
-	setReactCheckerId(guild, newChannelId) {
-		const updateGuild = sql.prepare("UPDATE guilds SET reactCheckerId = ? WHERE discordId = ?");
-		const key = `getReactCheckerById_${guild.id}`;
+	setGuildMessageId(guild, newMessageId) {
+		console.log("setGuildMessageId");
+		const updateGuild = sql.prepare("UPDATE guilds SET guildMessageId = ? WHERE discordId = ?");
+		const key = `getGuildChannelById_${guild.id}`;
+
+		this.cache.del(key);
+		updateGuild.run(newMessageId, guild.id);
+	}
+
+	// GET GUILD CHANNEL
+	getGuildChannelId(guild) {
+		const findGuild = sql.prepare("SELECT * FROM guilds WHERE discordId = ?");
+		const key = `getGuildChannelById_${guild.id}`;
+
+		function getGuildChannelIdFromDb() {
+			return findGuild.get(guild.id).guildChannelId;
+		}
+		return this.cache.get(key, getGuildChannelIdFromDb);
+	}
+
+	// SET REACT CHECKER
+	setGuildChannelId(guild, newChannelId) {
+		console.log("setGuildChannelId");
+		console.log(guild.id);
+		console.log(newChannelId);
+		const updateGuild = sql.prepare("UPDATE guilds SET guildChannelId = ? WHERE discordId = ?");
+		const key = `getGuildChannelById_${guild.id}`;
 
 		this.cache.del(key);
 		updateGuild.run(newChannelId, guild.id);
@@ -136,6 +167,9 @@ class GuildSql {
 			if (!foundMissingGuildToAdd) {
 				this.insertGuild(clientGuild);
 			}
+			
+			// TODO: Check if the new Guild wants to setup the bot
+			// Pass back to ready.js event
 		});
 
 		// check for guilds that kicked the bot during downtime and delete from database
